@@ -1,13 +1,22 @@
 const express = require('express');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
+const { Pool } = require('pg'); // <-- Importação do banco de dados
+
+// Configuração da conexão com o PostgreSQL
+const pool = new Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'sanafila_sus',
+    password: '', 
+    port: 5433,
+});
 
 const app = express();
 app.use(express.json());
 
-console.log('Iniciando o Bot do SANAFILA... Aguarde o QR Code.');
+console.log('Iniciando o Bot do SANAFILA... Aguarde.');
 
-// Configura o WhatsApp com permissões para rodar no Linux
 const client = new Client({
     authStrategy: new LocalAuth(),
     puppeteer: {
@@ -15,30 +24,25 @@ const client = new Client({
     }
 });
 
-// Gera o QR Code no terminal
 client.on('qr', (qr) => {
-    console.log('\n--- ESCANEIE O QR CODE ABAIXO PELO SEU WHATSAPP ---');
+    console.log('\n--- ESCANEIE O QR CODE (SE NECESSÁRIO) ---');
     qrcode.generate(qr, { small: true });
 });
 
-// Confirma conexão
 client.on('ready', () => {
-    console.log('\nSucesso! Bot do SANAFILA conectado e pronto para uso!');
+    console.log('\n✅ Bot do SANAFILA conectado ao WhatsApp e ao Banco de Dados!');
 });
 
-// Escuta as mensagens recebidas
 client.on('message', async (msg) => {
-    // 1. Travas de segurança essenciais
-    if (msg.fromMe) return; // Ignora mensagens enviadas pelo próprio bot
-    if (msg.isStatus) return; // Ignora atualizações de status/stories
+    if (msg.fromMe) return;
+    if (msg.isStatus) return;
 
-    // Ignora mensagens de grupos (o bot do SUS só deve falar no privado)
     const chat = await msg.getChat();
     if (chat.isGroup) return;
 
     const texto = msg.body.toLowerCase();
 
-    // 2. Simulação do Fluxo D-15
+    // Fluxo D-15
     if (texto === 'oi' || texto === 'ola' || texto === 'olá') {
         await msg.reply(
             '*SUS - SANAFILA (Ideathon CISCOMCAM)*\n\n' +
@@ -53,18 +57,37 @@ client.on('message', async (msg) => {
         await msg.reply('Entendido. Sua posição na fila está mantida com base no tempo de espera.');
     } 
     else if (texto === '2') {
-        await msg.reply('Que ótima notícia! Vamos registrar sua alta administrativa e liberar a vaga para o próximo paciente. Obrigado por avisar!');
+        try {
+            // MVP: Altera o primeiro paciente da fila que estiver AGUARDANDO
+            await pool.query(`
+                UPDATE sisreg_fila 
+                SET status = 'CANCELADO - ALTA VIA WHATSAPP' 
+                WHERE id = (SELECT id FROM sisreg_fila WHERE status = 'AGUARDANDO' LIMIT 1)
+            `);
+            await msg.reply('Que ótima notícia! Registramos sua alta e a vaga já foi liberada no sistema para outro paciente. Obrigado!');
+            console.log('🔄 SUCESSO: Vaga ociosa recuperada no banco de dados!');
+        } catch (err) {
+            console.error('Erro no banco:', err);
+        }
     } 
     else if (texto === '3') {
-        await msg.reply('Registramos o seu agravamento. O nosso motor de inteligência artificial acabou de recalcular o seu risco na Matriz Dinâmica. Fique atento, você pode ser chamado em breve.');
+        try {
+            // MVP: Adiciona 50 pontos de risco ao paciente
+            await pool.query(`
+                UPDATE sisreg_fila 
+                SET score_dinamico = score_dinamico + 50 
+                WHERE id = (SELECT id FROM sisreg_fila WHERE status = 'AGUARDANDO' LIMIT 1)
+            `);
+            await msg.reply('Registramos o seu agravamento. Nosso motor já recalculou seu risco e aumentou sua prioridade na fila.');
+            console.log('🚨 SUCESSO: Agravamento clínico registrado e score atualizado!');
+        } catch (err) {
+            console.error('Erro no banco:', err);
+        }
     }
 });
 
-// INICIALIZA O CLIENTE DO WHATSAPP (A linha que faltava)
-client.initialize().catch(err => console.error('Erro ao iniciar o cliente do WhatsApp:', err));
+client.initialize().catch(err => console.error('Erro no WhatsApp:', err));
 
-// Inicia o servidor web
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor da API rodando na porta ${PORT}`);
+app.listen(3000, () => {
+    console.log('Servidor da API rodando na porta 3000');
 });
