@@ -1,2 +1,3 @@
-2026/10/03-19:15:54.627 12eaa Creating DB /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Site Characteristics Database since it was missing.
-2026/10/03-19:15:54.635 12eaa Reusing MANIFEST /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Site Characteristics Database/MANIFEST-000001
+2026/10/03-23:54:58.792 3e5b Reusing MANIFEST /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Site Characteristics Database/MANIFEST-000001
+2026/10/03-23:54:58.793 3e5b Recovering log #3
+2026/10/03-23:54:58.793 3e5b Reusing old log /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Site Characteristics Database/000003.log 

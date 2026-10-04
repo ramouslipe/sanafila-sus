@@ -1,2 +1,3 @@
-2026/10/03-19:15:54.712 12e98 Creating DB /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/shared_proto_db since it was missing.
-2026/10/03-19:15:54.728 12e98 Reusing MANIFEST /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/shared_proto_db/MANIFEST-000001
+2026/10/03-23:54:59.074 3e50 Reusing MANIFEST /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/shared_proto_db/MANIFEST-000001
+2026/10/03-23:54:59.076 3e50 Recovering log #3
+2026/10/03-23:54:59.078 3e50 Reusing old log /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/shared_proto_db/000003.log 

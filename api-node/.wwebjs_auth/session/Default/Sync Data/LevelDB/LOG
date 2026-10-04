@@ -1,2 +1,3 @@
-2026/10/03-19:15:54.612 12e96 Creating DB /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Sync Data/LevelDB since it was missing.
-2026/10/03-19:15:54.629 12e96 Reusing MANIFEST /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Sync Data/LevelDB/MANIFEST-000001
+2026/10/03-23:54:58.776 3e52 Reusing MANIFEST /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Sync Data/LevelDB/MANIFEST-000001
+2026/10/03-23:54:58.787 3e52 Recovering log #3
+2026/10/03-23:54:58.788 3e52 Reusing old log /home/filipe-ramos/Documentos/sanafila-projeto/api-node/.wwebjs_auth/session/Default/Sync Data/LevelDB/000003.log 
